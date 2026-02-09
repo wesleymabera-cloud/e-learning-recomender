@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card" style="max-width: 700px; margin: 0 auto;">
+        <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">{{ course.title }}</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.95rem;">{{ course.get_category_display }} · {{ course.get_level_display }} · {{ course.total_pages }} pages</p>
+        <p style="margin-bottom: 1.5rem; color: var(--text-primary);">{{ course.description }}</p>
+        {% if is_enrolled %}
+            <p style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.95rem;">Your progress is saved when you read.</p>
+            <a href="{% url 'core:pdf_learn' course.id %}" class="btn btn-primary">{% if progress %}Continue from page {{ progress.last_page_read }}{% else %}Start Reading{% endif %}</a>
+        {% else %}
+            <form method="post" action="{% url 'core:enroll_course' course.id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Enroll in this course</button>
+            </form>
+        {% endif %}
+        <a href="{% url 'core:courses' %}" class="btn btn-outline" style="margin-left: 0.5rem;">Back to courses</a>
+    </div>
+</div>
+{% endblock %}

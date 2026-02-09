@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnAI - Intelligent E-Learning Platform</title>
+    <link rel="stylesheet" href="styles.css">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">LearnAI</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#courses">Courses</a></li>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#recommendations">Recommendations</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="showModal('login')">Login</button>
+                <button class="btn btn-primary" onclick="showModal('register')">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Personalized Learning with AI</h1>
+            <p>Experience the future of education with our intelligent platform that adapts to your learning style, tracks your progress, and recommends the perfect content just for you.</p>
+            <button class="btn btn-primary" style="background: white; color: var(--primary-color);" onclick="showModal('register')">Start Learning Today</button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        
+        <!-- Features Section -->
+        <section class="section" id="features">
+            <h2 class="section-title">Platform Features</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <h3 class="card-title">AI-Powered Recommendations</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Our advanced AI algorithms analyze your learning behavior, performance, and preferences to deliver personalized course recommendations tailored specifically to your needs.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <h3 class="card-title">Progress Tracking</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Monitor your learning journey with comprehensive dashboards that track your progress, completion rates, quiz scores, and overall performance metrics in real-time.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">💡</div>
+                        <h3 class="card-title">Intelligent Feedback</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>Receive actionable insights and personalized feedback based on your performance, helping you identify strengths and areas for improvement.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Courses Section -->
+        <section class="section" id="courses">
+            <h2 class="section-title">Available Courses</h2>
+            <div class="grid-3" id="courses-grid">
+                <!-- Courses will be dynamically populated -->
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section class="section" id="dashboard">
+            <h2 class="section-title">Your Learning Dashboard</h2>
+            <div class="dashboard-grid">
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li><a href="#" class="active" onclick="showDashboardSection('overview')">Overview</a></li>
+                        <li><a href="#" onclick="showDashboardSection('progress')">Progress Tracking</a></li>
+                        <li><a href="#" onclick="showDashboardSection('courses')">My Courses</a></li>
+                        <li><a href="#" onclick="showDashboardSection('profile')">Profile Settings</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Dashboard Content -->
+                <div class="dashboard-content">
+                    <!-- Stats -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-courses">5</div>
+                            <div class="stat-label">Courses Enrolled</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-lessons">23</div>
+                            <div class="stat-label">Lessons Completed</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-quizzes">87%</div>
+                            <div class="stat-label">Quiz Average</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-hours">42h</div>
+                            <div class="stat-label">Learning Time</div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Chart -->
+                    <div class="chart-container">
+                        <h3 class="chart-title">Weekly Learning Progress</h3>
+                        <canvas id="progressChart" width="800" height="300"></canvas>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="chart-container">
+                        <h3 class="chart-title">Recent Activity</h3>
+                        <div id="recent-activity">
+                            <!-- Activity items will be dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Recommendations Section -->
+        <section class="section" id="recommendations">
+            <h2 class="section-title">AI-Powered Recommendations</h2>
+            <div class="grid-2">
+                <div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">🧠</div>
+                            <h3 class="card-title">Your Learning Profile</h3>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>Learning Style:</strong> Visual & Interactive</p>
+                            <p><strong>Preferred Content:</strong> Video tutorials, Hands-on projects</p>
+                            <p><strong>Skill Level:</strong> Intermediate</p>
+                            <p><strong>Interests:</strong> Web Development, Data Science, AI/ML</p>
+                            <p><strong>Learning Pace:</strong> Moderate (5-8 hours/week)</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon">⭐</div>
+                            <h3 class="card-title">Recommended For You</h3>
+                        </div>
+                        <div class="card-content" id="recommendations-list">
+                            <!-- Recommendations will be dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Player Section -->
+        <section class="section" id="content-player">
+            <h2 class="section-title">Course Content</h2>
+            <div class="content-display">
+                <div class="tabs">
+                    <button class="tab active" onclick="showContentTab('lesson')">Lesson</button>
+                    <button class="tab" onclick="showContentTab('video')">Video</button>
+                    <button class="tab" onclick="showContentTab('quiz')">Quiz</button>
+                </div>
+                
+                <div id="tab-lesson" class="content-tab active">
+                    <h3>Introduction to Machine Learning</h3>
+                    <div class="content-text">
+                        <p>Machine Learning is a subset of artificial intelligence that focuses on building systems that can learn from and make decisions based on data. Instead of being explicitly programmed, these systems use algorithms to analyze patterns in data and improve their performance over time.</p>
+                        <br>
+                        <h4>Key Concepts:</h4>
+                        <ul style="margin-left: 2rem; margin-top: 1rem;">
+                            <li>Supervised Learning: Learning from labeled data</li>
+                            <li>Unsupervised Learning: Finding patterns in unlabeled data</li>
+                            <li>Reinforcement Learning: Learning through trial and error</li>
+                            <li>Neural Networks: Complex learning architectures</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div id="tab-video" class="content-tab" style="display: none;">
+                    <div class="content-video" style="height: 400px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem;">
+                        ▶ Video Player Placeholder
+                    </div>
+                    <h3>Machine Learning Fundamentals</h3>
+                    <p style="color: var(--text-secondary);">Duration: 15:32 minutes</p>
+                </div>
+                
+                <div id="tab-quiz" class="content-tab" style="display: none;">
+                    <div class="quiz-container">
+                        <div class="quiz-question">1. What type of learning uses labeled data for training?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="selectQuizOption(this)">A. Unsupervised Learning</div>
+                            <div class="quiz-option" onclick="selectQuizOption(this)">B. Supervised Learning</div>
+                            <div class="quiz-option" onclick="selectQuizOption(this)">C. Reinforcement Learning</div>
+                            <div class="quiz-option" onclick="selectQuizOption(this)">D. Deep Learning</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="submitQuiz()">Submit Quiz</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feedback Section -->
+        <section class="section" id="feedback">
+            <h2 class="section-title">Performance Feedback</h2>
+            <div class="feedback-section">
+                <div class="feedback-item">
+                    <strong>🎉 Great Progress!</strong>
+                    <p style="margin-top: 0.5rem;">You've completed 85% of the Machine Learning course. Keep up the excellent work!</p>
+                </div>
+                <div class="feedback-item warning">
+                    <strong>⚠️ Attention Needed</strong>
+                    <p style="margin-top: 0.5rem;">Your quiz scores in the Data Structures module have dropped recently. Consider reviewing the previous lessons.</p>
+                </div>
+                <div class="feedback-item">
+                    <strong>💡 Recommendation</strong>
+                    <p style="margin-top: 0.5rem;">Based on your performance, we recommend taking a short break before continuing with the Advanced Algorithms module.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Login</h2>
+                <button class="modal-close" onclick="closeModal('login')">&times;</button>
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="register-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Create Account</h2>
+                <button class="modal-close" onclick="closeModal('register')">&times;</button>
+            </div>
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" required placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" required placeholder="Create a password">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Learning Interests</label>
+                    <select class="form-select" multiple>
+                        <option>Web Development</option>
+                        <option>Data Science</option>
+                        <option>Machine Learning</option>
+                        <option>Mobile Development</option>
+                        <option>Cloud Computing</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

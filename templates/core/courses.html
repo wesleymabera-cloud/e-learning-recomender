@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 1.75rem; color: var(--text-primary);">Available Courses</h1>
+    <div class="card" style="margin-bottom: 2rem;">
+        <form method="get" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <input type="text" name="q" placeholder="Search courses..." value="{{ query }}" style="flex: 1; min-width: 200px;">
+            <select name="category" style="max-width: 220px;">
+                <option value="">All Categories</option>
+                <option value="web_development" {% if category == 'web_development' %}selected{% endif %}>Web Development</option>
+                <option value="data_science" {% if category == 'data_science' %}selected{% endif %}>Data Science</option>
+                <option value="machine_learning" {% if category == 'machine_learning' %}selected{% endif %}>Machine Learning</option>
+                <option value="mobile_development" {% if category == 'mobile_development' %}selected{% endif %}>Mobile Development</option>
+                <option value="cloud_computing" {% if category == 'cloud_computing' %}selected{% endif %}>Cloud Computing</option>
+                <option value="artificial_intelligence" {% if category == 'artificial_intelligence' %}selected{% endif %}>Artificial Intelligence</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a href="{% url 'core:courses' %}" class="btn btn-outline">Clear</a>
+        </form>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        {% for course in courses %}
+        <div class="card" style="padding: 0; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='var(--shadow-lg)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-md)';">
+            <div style="height: 160px; background: linear-gradient(135deg, #334155 0%, #1e293b 100%); display: flex; align-items: center; justify-content: center; color: #e2e8f0; font-size: 2.5rem; font-weight: 700;">{{ course.title|first }}</div>
+            <div style="padding: 1.5rem;">
+                <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">{{ course.title }}</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">{{ course.description|truncatewords:20 }}</p>
+                <div style="margin-bottom: 1rem;">
+                    <span style="background: var(--slate-200); color: var(--slate-700); padding: 0.25rem 0.65rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600;">{{ course.get_category_display }}</span>
+                    <span style="color: var(--text-secondary); font-size: 0.875rem; margin-left: 0.5rem;">{{ course.get_level_display }} · {{ course.total_pages }} pages</span>
+                </div>
+                <a href="{% url 'core:course_detail' course.id %}" class="btn btn-primary" style="width: 100%; text-align: center;">View Course</a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+            <p style="color: var(--text-secondary); font-size: 1.1rem;">No courses found.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

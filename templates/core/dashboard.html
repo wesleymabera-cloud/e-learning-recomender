@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 style="font-size: 2rem; font-weight: 700; margin-bottom: 1.75rem; color: var(--text-primary);">Your Learning Dashboard</h1>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem;">
+        <div class="card" style="padding: 1.5rem; text-align: center;">
+            <div style="font-size: 2.25rem; font-weight: 800; color: var(--slate-700);">{{ stats.courses_enrolled }}</div>
+            <div style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.9375rem;">Courses Enrolled</div>
+        </div>
+        <div class="card" style="padding: 1.5rem; text-align: center;">
+            <div style="font-size: 2.25rem; font-weight: 800; color: var(--slate-700);">{{ stats.total_pages_read }}</div>
+            <div style="color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.9375rem;">Pages Read</div>
+        </div>
+    </div>
+    <div class="card" style="margin-bottom: 2rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text-primary);">What You've Enrolled In</h2>
+        {% if enrollment_list %}
+            {% for item in enrollment_list %}
+            <div style="padding: 1.25rem; border: 1px solid var(--border-color); border-radius: var(--radius); margin-bottom: 1rem; background: var(--slate-50);">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">{{ item.course.title }}</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Progress: page {{ item.last_page }} of {{ item.total_pages }} ({{ item.progress_pct }}%)</p>
+                        <div style="width: 100%; max-width: 280px; height: 8px; background: var(--slate-200); border-radius: 4px; overflow: hidden; margin-top: 0.5rem;">
+                            <div style="height: 100%; background: linear-gradient(90deg, var(--slate-600), var(--slate-700)); width: {{ item.progress_pct }}%;"></div>
+                        </div>
+                    </div>
+                    <a href="{% url 'core:pdf_learn' item.course.id %}" class="btn btn-primary">{% if item.last_page >= item.total_pages %}Review{% else %}Continue Reading{% endif %}</a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: var(--text-secondary);">You haven't enrolled in any courses yet. <a href="{% url 'core:courses' %}" style="color: var(--slate-600); font-weight: 600;">Browse courses</a> to get started.</p>
+        {% endif %}
+    </div>
+    <div class="card">
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text-primary);">Recent Activity</h2>
+        {% if recent_activities %}
+            {% for activity in recent_activities %}
+            <div style="padding: 1rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem;">
+                <span style="font-size: 1.25rem;">{% if activity.activity_type == 'lesson_completed' %}📚{% elif activity.activity_type == 'quiz_completed' %}✅{% elif activity.activity_type == 'course_enrolled' %}🎯{% elif activity.activity_type == 'learning_time' %}⏱️{% else %}📌{% endif %}</span>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; color: var(--text-primary);">{{ activity.get_activity_type_display }}</div>
+                    <div style="font-size: 0.875rem; color: var(--text-secondary);">{{ activity.timestamp|date:"M d, H:i" }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: var(--text-secondary);">No recent activity yet. Enroll and start reading to see your progress here.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

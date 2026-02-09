@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="max-width: 500px; margin: 3rem auto;">
+    <div class="card" style="padding: 2.25rem;">
+        <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 1.75rem; text-align: center; color: var(--text-primary);">Create Account</h1>
+        
+        <form method="post">
+            {% csrf_token %}
+            {% if error %}
+            <div style="margin-bottom: 1.25rem; padding: 1rem; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(220, 38, 38, 0.3); border-radius: var(--radius); color: #b91c1c; font-size: 0.9375rem;">
+                {{ error }}
+            </div>
+            {% endif %}
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Username</label>
+                <input type="text" name="username" required placeholder="Choose a username">
+            </div>
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Email</label>
+                <input type="email" name="email" required placeholder="your@email.com">
+            </div>
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Password</label>
+                <input type="password" name="password" required placeholder="Create a password">
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--text-primary);">Learning Interests</label>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem; background: var(--slate-100); border-radius: 10px; cursor: pointer; font-size: 0.9rem;">
+                        <input type="checkbox" name="interests" value="Web Development">
+                        <span>Web Development</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem; background: var(--slate-100); border-radius: 10px; cursor: pointer; font-size: 0.9rem;">
+                        <input type="checkbox" name="interests" value="Data Science">
+                        <span>Data Science</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem; background: var(--slate-100); border-radius: 10px; cursor: pointer; font-size: 0.9rem;">
+                        <input type="checkbox" name="interests" value="Machine Learning">
+                        <span>Machine Learning</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem; background: var(--slate-100); border-radius: 10px; cursor: pointer; font-size: 0.9rem;">
+                        <input type="checkbox" name="interests" value="Mobile Development">
+                        <span>Mobile Development</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem; background: var(--slate-100); border-radius: 10px; cursor: pointer; font-size: 0.9rem;">
+                        <input type="checkbox" name="interests" value="Cloud Computing">
+                        <span>Cloud Computing</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem; background: var(--slate-100); border-radius: 10px; cursor: pointer; font-size: 0.9rem;">
+                        <input type="checkbox" name="interests" value="Artificial Intelligence">
+                        <span>Artificial Intelligence</span>
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">Create Account</button>
+        </form>
+        <p style="text-align: center; margin-top: 1.5rem; color: var(--text-secondary); font-size: 0.9375rem;">
+            Already have an account? <a href="{% url 'core:login' %}" style="color: var(--slate-600); font-weight: 600;">Login</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+Watching for file changes with StatReloader
+[03/Feb/2026 08:23:10] "GET /?password=e0a1fcba-45cd-4aac-8e7b-2f9291afedb4 HTTP/1.1" 200 11059
+Invalid HTTP_HOST header: '8000-38474474-6fc4-4c27-bd1e-be912c43a1ba.sandbox-service.public.prod.myninja.ai'. You may need to add '8000-38474474-6fc4-4c27-bd1e-be912c43a1ba.sandbox-service.public.prod.myninja.ai' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '8000-38474474-6fc4-4c27-bd1e-be912c43a1ba.sandbox-service.public.prod.myninja.ai'. You may need to add '8000-38474474-6fc4-4c27-bd1e-be912c43a1ba.sandbox-service.public.prod.myninja.ai' to ALLOWED_HOSTS.
+[03/Feb/2026 08:23:12] "GET /?_gl=1*k6s81h*_gcl_au*MTA2MjA0OTA5OC4xNzY0NTgwMDY5*_ga*MTc0ODAwNTY4My4xNzY0NTc4MDM5*_ga_8NW18Q4WF2*czE3NzAxMDE3NzUkbzQkZzEkdDE3NzAxMDM0MDUkajYwJGwwJGgzOTQ2NzYzMjA.&password=e0a1fcba-45cd-4aac-8e7b-2f9291afedb4 HTTP/1.1" 400 70809
+Not Found: /favicon.ico
+[03/Feb/2026 08:23:14] "GET /favicon.ico?password=e0a1fcba-45cd-4aac-8e7b-2f9291afedb4 HTTP/1.1" 404 6934

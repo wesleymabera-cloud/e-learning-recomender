@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LearnAI - Intelligent E-Learning Platform{% endblock %}</title>
+    <style>
+        :root {
+            /* Slate blue palette */
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --primary-color: #4f5d9e;
+            --primary-dark: #3d4a7c;
+            --secondary-color: #5b6ba8;
+            --accent-color: #38bdf8;
+            --background: linear-gradient(160deg, #e2e8f0 0%, #cbd5e1 35%, #94a3b8 100%);
+            --background-solid: #c5cfe0;
+            --surface: #ffffff;
+            --surface-elevated: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: #cbd5e1;
+            --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08);
+            --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.12), 0 2px 6px -2px rgba(15, 23, 42, 0.06);
+            --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 4px 10px -5px rgba(15, 23, 42, 0.08);
+            --radius: 12px;
+            --radius-lg: 16px;
+            --nav-gradient: linear-gradient(135deg, #334155 0%, #1e293b 50%, #0f172a 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: var(--nav-gradient);
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.25);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0.875rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #94a3b8 0%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .logo:hover {
+            background: linear-gradient(135deg, #cbd5e1 0%, #f8fafc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.25rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: rgba(248, 250, 252, 0.85);
+            font-weight: 500;
+            font-size: 0.9375rem;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #f8fafc;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-links a.active {
+            color: #f8fafc;
+            background: rgba(255, 255, 255, 0.15);
+            font-weight: 600;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-buttons .welcome-text {
+            color: rgba(248, 250, 252, 0.9);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 0.6rem 1.25rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #475569 0%, #334155 100%);
+            color: #f8fafc;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.12);
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--slate-700);
+            border: 1px solid var(--slate-400);
+        }
+        .btn-outline:hover {
+            background: var(--slate-100);
+            border-color: var(--slate-500);
+            color: var(--slate-800);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
+            flex: 1;
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .footer {
+            background: var(--nav-gradient);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .footer p {
+            color: rgba(248, 250, 252, 0.8);
+            font-size: 0.9375rem;
+            font-weight: 500;
+        }
+
+        .footer .brand {
+            color: rgba(248, 250, 252, 0.95);
+            font-weight: 700;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            background: var(--surface);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--slate-500);
+            box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .nav-container { padding: 0.75rem 1rem; flex-wrap: wrap; gap: 0.75rem; }
+            .nav-links { gap: 0; }
+            .nav-links a { padding: 0.4rem 0.75rem; font-size: 0.875rem; }
+        }
+    </style>
+    <script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'core:index' %}" class="logo">LearnAI</a>
+            <ul class="nav-links">
+                <li><a href="{% url 'core:index' %}" class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">Home</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'core:courses' %}" class="{% if request.resolver_match.url_name == 'courses' or request.resolver_match.url_name == 'course_detail' %}active{% endif %}">Courses</a></li>
+                    <li><a href="{% url 'core:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a></li>
+                    <li><a href="{% url 'core:recommendations' %}" class="{% if request.resolver_match.url_name == 'recommendations' %}active{% endif %}">Recommendations</a></li>
+                {% endif %}
+            </ul>
+            <div class="nav-buttons">
+                {% if user.is_authenticated %}
+                    <span class="welcome-text">Welcome, {{ user.username }}</span>
+                    <a href="{% url 'core:logout' %}" class="btn btn-secondary">Logout</a>
+                {% else %}
+                    <a href="{% url 'core:login' %}" class="btn btn-secondary">Login</a>
+                    <a href="{% url 'core:register' %}" class="btn btn-primary">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer class="footer">
+        <p>&copy; 2026 <span class="brand">LearnAI</span> — Intelligent E-Learning Platform. Powered by Django & AI.</p>
+    </footer>
+
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,4 @@
+SystemCheckError: System check identified some issues:
+
+ERRORS:
+<class 'core.admin.UserAdmin'>: (admin.E116) The value of 'list_filter[3]' refers to 'created_at', which does not refer to a Field.

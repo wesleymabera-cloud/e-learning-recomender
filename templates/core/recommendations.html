@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.75rem;">
+        <h1 style="font-size: 2rem; font-weight: 700; color: var(--text-primary);">Recommendations & Reading Insights</h1>
+        <button onclick="refreshRecommendations()" class="btn btn-primary">🔄 Refresh</button>
+    </div>
+
+    <!-- Reading habits & speed -->
+    <div class="card" style="margin-bottom: 2rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text-primary);">📖 Reading Habits & Speed</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem;">
+            <div>
+                <div style="color: var(--text-secondary); font-size: 0.875rem;">Total pages read</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--slate-700);">{{ total_pages_read }}</div>
+            </div>
+            <div>
+                <div style="color: var(--text-secondary); font-size: 0.875rem;">Reading speed (pages/min)</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--slate-700);">{{ reading_speed }}</div>
+            </div>
+            <div>
+                <div style="color: var(--text-secondary); font-size: 0.875rem;">Avg pages per session</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--slate-700);">{{ avg_pages_per_session }}</div>
+            </div>
+            <div>
+                <div style="color: var(--text-secondary); font-size: 0.875rem;">Preferred reading time</div>
+                <div style="font-size: 1.05rem; font-weight: 600; color: var(--text-primary);">{{ preferred_time }}</div>
+            </div>
+        </div>
+    </div>
+
+    {% if related_courses %}
+    <div class="card" style="margin-bottom: 2rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">🔗 Related Courses</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+            {% for c in related_courses %}
+            <a href="{% url 'core:course_detail' c.id %}" class="btn btn-outline" style="text-decoration: none;">{{ c.title }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card" style="margin-bottom: 2rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">Search for Learning Resources</h2>
+        <div style="display: flex; gap: 1rem;">
+            <input type="text" id="search-input" placeholder="What do you want to learn?" style="flex: 1;">
+            <button onclick="searchInternet()" class="btn btn-primary">🔍 Search</button>
+        </div>
+        <div id="search-results" style="margin-top: 1rem; display: none;">
+            <div id="search-loading" style="text-align: center; padding: 2rem; display: none;">
+                <div style="font-size: 1.5rem;">🤖 Searching the internet...</div>
+            </div>
+            <div id="search-results-list"></div>
+        </div>
+    </div>
+    
+    <div class="card" style="margin-bottom: 2rem;">
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--text-primary);">Your Learning Profile</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+            <div>
+                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.25rem;">Learning Style</div>
+                <div style="font-weight: 600;">{{ user.get_learning_style_display }}</div>
+            </div>
+            <div>
+                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.25rem;">Skill Level</div>
+                <div style="font-weight: 600;">{{ user.get_skill_level_display }}</div>
+            </div>
+            <div>
+                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.25rem;">Learning Pace</div>
+                <div style="font-weight: 600;">{{ user.get_learning_pace_display }}</div>
+            </div>
+            <div>
+                <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.25rem;">Preferred Content</div>
+                <div style="font-weight: 600;">{{ user.preferred_content_type|title }}</div>
+            </div>
+        </div>
+        <div style="margin-top: 1rem;">
+            <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.25rem;">Interests</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                {% for interest in user.interests %}
+                <span style="background: var(--slate-200); color: var(--slate-700); padding: 0.25rem 0.75rem; border-radius: 8px; font-size: 0.875rem; font-weight: 500;">{{ interest }}</span>
+                {% endfor %}
+                {% if not user.interests %}
+                <span style="color: var(--text-secondary);">No interests selected</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recommendations -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+        <div>
+            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">Recommended For You</h2>
+            {% if recommendations %}
+                {% for rec in recommendations %}
+                <div class="card" style="border: 1px solid var(--slate-300); padding: 1.25rem; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                        <div>
+                            <span style="display: inline-block; background: var(--slate-200); color: var(--slate-700); padding: 0.25rem 0.65rem; border-radius: 8px; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.5rem;">
+                                {% if forloop.counter == 1 %}🥇 Top Pick
+                                {% elif forloop.counter == 2 %}🥈 Highly Recommended
+                                {% else %}⭐ Recommended{% endif %}
+                            </span>
+                            <h3 style="font-size: 1.25rem; font-weight: 700; margin-top: 0.5rem;">{{ rec.course.title }}</h3>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.5rem; font-weight: 800; color: var(--slate-700);">{{ rec.total_score }}%</div>
+                            <div style="font-size: 0.75rem; color: var(--text-secondary);">Match Score</div>
+                        </div>
+                    </div>
+                    
+                    <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1rem;">{{ rec.course.description|truncatewords:15 }}</p>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        {% for reason in rec.reasons %}
+                        <div style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 0.25rem;">✓ {{ reason }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="{% url 'core:course_detail' rec.course.id %}" class="btn btn-primary" style="flex: 1; text-align: center;">View Course</a>
+                        <button onclick="enrollInCourse({{ rec.course.id }})" class="btn btn-outline">Enroll</button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% elif fallback_courses %}
+                {% for course in fallback_courses %}
+                <div class="card" style="border: 1px solid var(--slate-300); padding: 1.25rem; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+                        <div>
+                            <h3 style="font-size: 1.15rem; font-weight: 700;">{{ course.title }}</h3>
+                            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">{{ course.description|truncatewords:18 }}</p>
+                        </div>
+                        <div style="text-align: right; font-size: 0.8rem; color: var(--text-secondary);">
+                            {{ course.get_category_display }}<br>
+                            {{ course.total_pages }} pages
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="{% url 'core:course_detail' course.id %}" class="btn btn-primary" style="flex: 1; text-align: center;">View Course</a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="card" style="padding: 2rem; text-align: center;">
+                    <p style="color: var(--text-secondary);">You’ve already explored all available courses. New recommendations will appear here when more content is added.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div>
+            <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">Behavior Insights</h2>
+            <div class="card">
+                {% if behavior_insights %}
+                <div style="margin-bottom: 1.5rem;">
+                    <h3 style="font-weight: 600; margin-bottom: 0.5rem;">Content Preferences</h3>
+                    {% for content_type, percentage in behavior_insights.content_preferences.distribution.items %}
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                        <span>{{ content_type|title }}</span>
+                        <span>{{ percentage }}%</span>
+                    </div>
+                    <div style="background: var(--slate-200); height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem;">
+                        <div style="height: 100%; background: var(--slate-600); width: {{ percentage }}%;"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <h3 style="font-weight: 600; margin-bottom: 0.5rem;">Learning Pace</h3>
+                    <div style="padding: 1rem; background: rgba(79, 70, 229, 0.1); border-radius: var(--radius);">
+                        {{ behavior_insights.learning_pace|title }} ({{ behavior_insights.content_preferences.most_used|title }} content preferred)
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 style="font-weight: 600; margin-bottom: 0.5rem;">Quiz Performance</h3>
+                    <div style="padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: var(--radius);">
+                        Average: {{ behavior_insights.quiz_performance.average }}% ({{ behavior_insights.quiz_performance.count }} quizzes)
+                        <br>
+                        Trend: {{ behavior_insights.quiz_performance.trend|title }}
+                    </div>
+                </div>
+                {% else %}
+                <p style="color: var(--text-secondary);">Not enough data to generate insights yet. Keep learning!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function refreshRecommendations() {
+    fetch('{% url "core:refresh_recommendations" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Recommendations refreshed successfully!');
+            location.reload();
+        }
+    });
+}
+
+function enrollInCourse(courseId) {
+    fetch(`/courses/${courseId}/enroll/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            location.reload();
+        } else {
+            alert(data.message);
+        }
+    });
+}
+
+function searchInternet() {
+    const query = document.getElementById('search-input').value.trim();
+    if (!query) {
+        alert('Please enter a search query');
+        return;
+    }
+
+    const searchResults = document.getElementById('search-results');
+    const searchLoading = document.getElementById('search-loading');
+    const searchResultsList = document.getElementById('search-results-list');
+
+    searchResults.style.display = 'block';
+    searchLoading.style.display = 'block';
+    searchResultsList.innerHTML = '';
+
+    fetch('{% url "core:search_internet" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `query=${encodeURIComponent(query)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        searchLoading.style.display = 'none';
+
+        if (data.success) {
+            if (data.resources.length > 0) {
+                let html = '<h3 style="margin-bottom: 1rem;">🤖 AI Research Results</h3>';
+                data.resources.forEach((resource, index) => {
+                    html += `
+                        <div style="background: var(--surface); border-radius: var(--radius); padding: 1rem; margin-bottom: 1rem; border-left: 4px solid var(--primary-color);">
+                            <div style="display: flex; align-items: start; gap: 1rem;">
+                                <span style="font-size: 1.5rem;">${index + 1}.</span>
+                                <div style="flex: 1;">
+                                    <h4 style="margin: 0 0 0.5rem 0; font-size: 1rem; font-weight: 600;">
+                                        <a href="${resource.url}" target="_blank" style="color: var(--primary-color); text-decoration: none;">
+                                            ${resource.title}
+                                        </a>
+                                    </h4>
+                                    <p style="margin: 0; color: var(--text-secondary); font-size: 0.875rem;">${resource.url}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                searchResultsList.innerHTML = html;
+            } else {
+                searchResultsList.innerHTML = '<p style="color: var(--text-secondary);">No resources found. Try a different search query.</p>';
+            }
+        } else {
+            searchResultsList.innerHTML = `<p style="color: var(--text-secondary);">Error: ${data.error}</p>`;
+        }
+    })
+    .catch(error => {
+        searchLoading.style.display = 'none';
+        searchResultsList.innerHTML = '<p style="color: var(--text-secondary);">Network error occurred. Please try again.</p>';
+        console.error('Search error:', error);
+    });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %}
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>

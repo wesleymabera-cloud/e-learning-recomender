@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+{# Logged-in: Welcome back + quick insights + links to Dashboard, Courses, Recommendations #}
+<div class="container">
+    <div class="card" style="margin-bottom: 2rem; padding: 2.5rem;">
+        <h1 style="font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary);">Welcome back, {{ user.username }}</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Here’s a quick overview of your learning.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+            <div style="padding: 1rem; background: var(--slate-100); border-radius: var(--radius); text-align: center;">
+                <div style="font-size: 1.75rem; font-weight: 800; color: var(--slate-700);">{{ courses_enrolled }}</div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">Courses enrolled</div>
+            </div>
+            <div style="padding: 1rem; background: var(--slate-100); border-radius: var(--radius); text-align: center;">
+                <div style="font-size: 1.75rem; font-weight: 800; color: var(--slate-700);">{{ total_pages_read }}</div>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">Pages read</div>
+            </div>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem;">Go to your dashboard to continue reading, or explore courses and recommendations.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+            <a href="{% url 'core:dashboard' %}" class="btn btn-primary">Dashboard — my courses & progress</a>
+            <a href="{% url 'core:courses' %}" class="btn btn-outline">Browse courses</a>
+            <a href="{% url 'core:recommendations' %}" class="btn btn-outline">Recommendations & insights</a>
+        </div>
+    </div>
+</div>
+{% else %}
+{# Guests: welcome + login/signup only #}
+<section class="hero-home" style="background: linear-gradient(145deg, #334155 0%, #1e293b 40%, #0f172a 100%); color: #f8fafc; padding: 5rem 2rem; text-align: center; min-height: 75vh; display: flex; align-items: center; justify-content: center;">
+    <div style="max-width: 680px; margin: 0 auto;">
+        <h1 style="font-size: 2.75rem; margin-bottom: 1.25rem; font-weight: 800; letter-spacing: -0.03em;">Welcome to LearnAI</h1>
+        <p style="font-size: 1.2rem; margin-bottom: 2.5rem; opacity: 0.92; line-height: 1.75;">
+            Your IT learning platform. Sign in or create an account to access PDF courses, track your progress, and get personalized recommendations.
+        </p>
+        <div style="display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap;">
+            <a href="{% url 'core:login' %}" class="btn btn-secondary" style="padding: 1rem 1.75rem; font-size: 1rem;">Login</a>
+            <a href="{% url 'core:register' %}" class="btn btn-primary" style="padding: 1rem 1.75rem; font-size: 1rem;">Sign Up</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

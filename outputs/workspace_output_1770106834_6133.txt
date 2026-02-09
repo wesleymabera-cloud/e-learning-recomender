@@ -1,0 +1,11 @@
+Migrations for 'core':
+  core/migrations/0001_initial.py
+    + Create model Course
+    + Create model User
+    + Create model Feedback
+    + Create model Lesson
+    + Create model Quiz
+    + Create model QuizAttempt
+    + Create model Activity
+    + Create model Enrollment
+    + Create model Recommendation

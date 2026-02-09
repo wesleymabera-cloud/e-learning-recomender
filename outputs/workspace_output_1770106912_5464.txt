@@ -1,0 +1,38 @@
+Creating sample courses...
+  Created course: Machine Learning Fundamentals
+    Created lesson 1
+    Created lesson 2
+    Created lesson 3
+    Created lesson 4
+    Created lesson 5
+  Created course: Modern Web Development
+    Created lesson 1
+    Created lesson 2
+    Created lesson 3
+    Created lesson 4
+    Created lesson 5
+  Created course: Data Science with Python
+    Created lesson 1
+    Created lesson 2
+    Created lesson 3
+    Created lesson 4
+    Created lesson 5
+  Created course: Cloud Computing Essentials
+    Created lesson 1
+    Created lesson 2
+    Created lesson 3
+    Created lesson 4
+    Created lesson 5
+  Created course: AI for Business Applications
+    Created lesson 1
+    Created lesson 2
+    Created lesson 3
+    Created lesson 4
+    Created lesson 5
+  Created course: React Native Development
+    Created lesson 1
+    Created lesson 2
+    Created lesson 3
+    Created lesson 4
+    Created lesson 5
+Sample data created successfully!

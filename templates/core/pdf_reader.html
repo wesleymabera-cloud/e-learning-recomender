@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+<div class="container" style="max-width: 1000px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+        <h1 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">{{ course.title }}</h1>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <span style="color: var(--text-secondary);">Page <strong id="current-page-num">{{ current_page }}</strong> of {{ total_pages }}</span>
+            <a href="{% url 'core:dashboard' %}" class="btn btn-outline" style="padding: 0.5rem 1rem;">Back to Dashboard</a>
+        </div>
+    </div>
+    <!-- Page navigation -->
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+        <button type="button" class="btn btn-outline" id="prev-page" {% if current_page <= 1 %}disabled{% endif %}>Previous</button>
+        <input type="number" id="page-input" min="1" max="{{ total_pages }}" value="{{ current_page }}" style="width: 4rem; text-align: center; padding: 0.5rem; border: 2px solid var(--border-color); border-radius: var(--radius);">
+        <button type="button" class="btn btn-outline" id="go-page">Go</button>
+        <button type="button" class="btn btn-primary" id="next-page" {% if current_page >= total_pages %}disabled{% endif %}>Next</button>
+    </div>
+    <div class="card" style="padding: 2rem; min-height: 500px;">
+        {% if pdf_url %}
+        <iframe id="pdf-frame" src="{{ pdf_url }}#page={{ current_page }}" style="width: 100%; height: 70vh; border: none; border-radius: var(--radius);" title="PDF"></iframe>
+        {% else %}
+        <div id="page-content" style="font-size: 1.1rem; line-height: 1.8;">
+            <p style="color: var(--text-secondary);">Page {{ current_page }} of {{ total_pages }}</p>
+            <p>This is placeholder content for <strong>{{ course.title }}</strong>. In production, each page would show the actual PDF content or an embedded viewer.</p>
+            <p>Your progress (page {{ current_page }}) is saved automatically when you change pages or leave. Use the buttons above to move between pages.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Chatbot (optional) -->
+<div id="chat-toggle" style="position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #334155, #1e293b); color: white; border: none; cursor: pointer; font-size: 1.5rem; box-shadow: var(--shadow-lg); z-index: 100;">💬</div>
+<div id="chat-panel" style="display: none; position: fixed; bottom: 90px; right: 24px; width: 380px; max-height: 450px; background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); z-index: 99; flex-direction: column; border: 1px solid var(--border-color);">
+    <div style="padding: 1rem; border-bottom: 1px solid var(--border-color); font-weight: 700;">Ask about this course</div>
+    <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 1rem; min-height: 200px; max-height: 280px;"></div>
+    <div style="padding: 0.75rem; border-top: 1px solid var(--border-color); display: flex; gap: 0.5rem;">
+        <input type="text" id="chat-input" placeholder="Ask a question..." style="flex: 1; padding: 0.6rem; border: 2px solid var(--border-color); border-radius: var(--radius);">
+        <button type="button" class="btn btn-primary" id="chat-send">Send</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    const totalPages = {{ total_pages }};
+    let currentPage = {{ current_page }};
+    const courseId = {{ course.id }};
+    const csrfToken = document.querySelector('input[name=csrfmiddlewaretoken]') && document.querySelector('input[name=csrfmiddlewaretoken]').value;
+
+    function saveProgress(page) {
+        fetch('{% url "core:api_save_progress" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify({ course_id: courseId, page: page })
+        }).then(r => r.json()).then(() => {}).catch(() => {});
+    }
+
+    function updatePageUI(page) {
+        currentPage = Math.max(1, Math.min(totalPages, page));
+        document.getElementById('current-page-num').textContent = currentPage;
+        document.getElementById('page-input').value = currentPage;
+        document.getElementById('prev-page').disabled = currentPage <= 1;
+        document.getElementById('next-page').disabled = currentPage >= totalPages;
+        var frame = document.getElementById('pdf-frame');
+        if (frame && frame.src) {
+            frame.src = frame.src.replace(/#page=\d+/, '#page=' + currentPage);
+        }
+        saveProgress(currentPage);
+    }
+
+    document.getElementById('prev-page').addEventListener('click', function() {
+        if (currentPage > 1) updatePageUI(currentPage - 1);
+    });
+    document.getElementById('next-page').addEventListener('click', function() {
+        if (currentPage < totalPages) updatePageUI(currentPage + 1);
+    });
+    document.getElementById('go-page').addEventListener('click', function() {
+        var n = parseInt(document.getElementById('page-input').value, 10);
+        if (!isNaN(n)) updatePageUI(n);
+    });
+    document.getElementById('page-input').addEventListener('change', function() {
+        var n = parseInt(this.value, 10);
+        if (!isNaN(n)) updatePageUI(n);
+    });
+
+    window.addEventListener('beforeunload', function() {
+        saveProgress(currentPage);
+    });
+
+    // Chatbot
+    var chatPanel = document.getElementById('chat-panel');
+    var chatToggle = document.getElementById('chat-toggle');
+    var chatMessages = document.getElementById('chat-messages');
+    var chatInput = document.getElementById('chat-input');
+    var chatSend = document.getElementById('chat-send');
+
+    chatToggle.addEventListener('click', function() {
+        chatPanel.style.display = chatPanel.style.display === 'none' ? 'flex' : 'none';
+    });
+
+    function addChatMessage(role, content) {
+        var div = document.createElement('div');
+        div.style.marginBottom = '0.75rem';
+        div.style.padding = '0.6rem';
+        div.style.borderRadius = 'var(--radius)';
+        div.style.background = role === 'user' ? 'rgba(79, 70, 229, 0.1)' : 'var(--background)';
+        div.style.fontSize = '0.95rem';
+        div.innerHTML = (role === 'user' ? '<strong>You:</strong> ' : '<strong>Assistant:</strong> ') + content;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    chatSend.addEventListener('click', function() {
+        var msg = (chatInput.value || '').trim();
+        if (!msg) return;
+        addChatMessage('user', msg);
+        chatInput.value = '';
+        fetch('{% url "core:api_chat" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify({ course_id: courseId, message: msg })
+        })
+        .then(r => r.json())
+        .then(function(data) {
+            if (data.success) addChatMessage('assistant', data.answer);
+            else addChatMessage('assistant', data.error || 'Sorry, something went wrong.');
+        })
+        .catch(function() {
+            addChatMessage('assistant', 'Unable to get a response. Try again.');
+        });
+    });
+    chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') chatSend.click();
+    });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,21 @@
+Collecting django
+  Downloading django-5.2.10-py3-none-any.whl.metadata (4.1 kB)
+Collecting djangorestframework
+  Downloading djangorestframework-3.16.1-py3-none-any.whl.metadata (11 kB)
+Collecting asgiref>=3.8.1 (from django)
+  Downloading asgiref-3.11.0-py3-none-any.whl.metadata (9.3 kB)
+Collecting sqlparse>=0.3.1 (from django)
+  Downloading sqlparse-0.5.5-py3-none-any.whl.metadata (4.7 kB)
+Downloading django-5.2.10-py3-none-any.whl (8.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.3/8.3 MB 83.0 MB/s eta 0:00:00
+Downloading djangorestframework-3.16.1-py3-none-any.whl (1.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 182.3 MB/s eta 0:00:00
+Downloading asgiref-3.11.0-py3-none-any.whl (24 kB)
+Downloading sqlparse-0.5.5-py3-none-any.whl (46 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 46.1/46.1 kB 25.3 MB/s eta 0:00:00
+Installing collected packages: sqlparse, asgiref, django, djangorestframework
+Successfully installed asgiref-3.11.0 django-5.2.10 djangorestframework-3.16.1 sqlparse-0.5.5
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 24.0 -> 25.3
+[notice] To update, run: pip install --upgrade pip
